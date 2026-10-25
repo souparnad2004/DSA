@@ -135,3 +135,69 @@ For 45:
 
 This is the approach used by `PrimeFactors`. It runs in O(sqrt(n)) time in
 the worst case and uses O(1) extra space, not counting printed output.
+
+# Sieve of Eratosthenes — Quick Revision Notes
+
+## What it does
+Finds all prime numbers up to a given limit `n` efficiently.
+
+## Core Idea
+Instead of testing each number individually for primality, we assume every number is prime at first, then **cross out multiples** of each prime we discover. Whatever remains uncrossed at the end is prime.
+
+## Code Walkthrough (Java)
+
+```java
+static void sieve(int n) {
+    if (n < 2) return;                 // No primes below 2
+
+    boolean[] arr = new boolean[n + 1]; // index = number, value = is it prime?
+    Arrays.fill(arr, true);             // Optimistically mark all as prime
+
+    arr[0] = false;                     // 0 is not prime
+    arr[1] = false;                     // 1 is not prime
+
+    for (int i = 2; i <= n / i; i++) {  // i * i <= n, i.e. i <= sqrt(n)
+        if (isPrime(i)) {               // NOTE: normally check arr[i] here
+            for (int j = i * i; j <= n; j += i) {
+                arr[j] = false;         // Cross out multiples of i
+            }
+        }
+    }
+
+    for (int i = 2; i < n; i++) {
+        if (arr[i]) System.out.print(i + " "); // Print remaining primes
+    }
+}
+```
+
+## Why start crossing out from `i * i`?
+Multiples like `2*i, 3*i, ..., (i-1)*i` were already crossed out by smaller primes (`2, 3, ..., i-1`).  
+So the first multiple of `i` that hasn't been touched yet is `i * i`.
+
+## Why loop only till `i <= n / i`?
+This is the same as `i * i <= n`, i.e. `i <= sqrt(n)`.  
+Any composite number `≤ n` must have a prime factor `≤ sqrt(n)`. Once we've processed primes up to `sqrt(n)`, every composite `≤ n` is already crossed out.
+
+## What `isPrime(i)` is doing here
+In a clean sieve, you usually check `if (arr[i])` instead of calling a separate `isPrime(i)`.  
+Calling `isPrime(i)` inside the sieve is redundant (and slower) because `arr[i]` already tells you whether `i` is still considered prime. Treat this as a reminder to use the boolean array itself.
+
+## Time & Space Complexity
+- **Time:** O(n log log n) — nearly linear
+- **Space:** O(n) for the boolean array
+
+## Example Trace (n = 20)
+1. Start: all `true` except `0` and `1`.
+2. `i = 2`: cross out `4, 6, 8, 10, 12, 14, 16, 18, 20`.
+3. `i = 3`: cross out `9, 15` (`6, 12, 18` already done).
+4. `i = 4`: already `false`, skip.
+5. `i = 5`: `5*5 = 25 > 20`, outer loop stops.
+6. Remaining `true`: `2, 3, 5, 7, 11, 13, 17, 19`.
+
+## Key Takeaways for Revision
+- Boolean array where **index = number**.
+- `0` and `1` are never prime.
+- Cross out multiples of each found prime.
+- Start crossing from `i * i`.
+- Stop outer loop at `sqrt(n)` (`i <= n / i`).
+- What's still `true` at the end are the primes.

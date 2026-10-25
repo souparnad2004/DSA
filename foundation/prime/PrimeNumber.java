@@ -1,4 +1,5 @@
 package foundation.prime;
+import java.util.Arrays;
 
 public class PrimeNumber {
 
@@ -44,10 +45,32 @@ public class PrimeNumber {
         return true;
     }
 
+    static void sieve(int n) {
+        if(n < 2) return;
+
+        boolean[] arr = new boolean[n+1];
+
+        Arrays.fill(arr, true);
+
+        arr[0] = false;
+        arr[1] = false;
+
+        for(int i = 2; i <= n/i; i++) {
+            if(isPrime(i)) {
+                for(int j = i * i; j <= n; j += i) {
+                    arr[j] = false;
+                }
+            }
+        }
+
+        for(int i = 2; i < n; i++) {
+            if(arr[i])  System.out.print(i + " ");
+        }
+    }
+    
     public static void main(String[] args) {
         System.out.println(isPrime(4));
         System.out.println(isPrime(18));
-
-        PrimeFactors(18);
+        sieve(30);
     }
 }
