@@ -1,5 +1,6 @@
 package foundation.prime;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -162,6 +163,27 @@ public class PrimeNumber {
         }
 
         return result;
+    }
+
+    static long gcd(long a, long b) {
+        while(b != 0) {
+            long remainder = a % b;
+
+            a = b;
+            b = remainder;
+        }
+
+        return a;
+    }
+
+    static long lcm(long a, long b) {
+        if(a <= 0 || b <= 0) {
+            throw new IllegalArgumentException("Both number must be positive");
+        }
+
+        long g = gcd(a, b);
+
+        return (a / g) * b;
     }
 
     public static void main(String[] args) {
