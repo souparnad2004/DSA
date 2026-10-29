@@ -7,6 +7,10 @@ import java.util.List;
 
 public class PrimeNumber {
 
+    /**
+     * Trial-division prime factorization.
+     * Time: O(sqrt(n)); Space: O(1), excluding printed output.
+     */
     static void PrimeFactors(int n) {
         if (n <= 1)
             return;
@@ -28,6 +32,10 @@ public class PrimeNumber {
         }
     }
 
+    /**
+     * Tests primality by checking odd divisors up to sqrt(n).
+     * Time: O(sqrt(n)); Space: O(1).
+     */
     static boolean isPrime(int n) {
 
         if (n <= 1)
@@ -49,6 +57,10 @@ public class PrimeNumber {
         return true;
     }
 
+    /**
+     * Finds all primes up to limit with the Sieve of Eratosthenes.
+     * Time: O(limit log log limit); Space: O(limit), including the result.
+     */
     static List<Integer> simpleSieve(int limit) {
 
         boolean[] isPrime = new boolean[limit + 1];
@@ -83,6 +95,11 @@ public class PrimeNumber {
         return primes;
     }
 
+    /**
+     * Finds primes in [L, R] using a base sieve and a marked segment.
+     * Let N = R - L + 1. Time: O(sqrt(R) log log R + N log log R);
+     * Space: O(sqrt(R) + N), including the base primes and result.
+     */
     static List<Long> segmentedSieve(long L, long R) {
 
         if (L < 0 || R < L) {
@@ -165,6 +182,10 @@ public class PrimeNumber {
         return result;
     }
 
+    /**
+     * Computes the GCD using Euclid's algorithm.
+     * Time: O(log(min(a, b))); Space: O(1).
+     */
     static long gcd(long a, long b) {
         while(b != 0) {
             long remainder = a % b;
@@ -176,6 +197,10 @@ public class PrimeNumber {
         return a;
     }
 
+    /**
+     * Computes the LCM using the GCD.
+     * Time: O(log(min(a, b))); Space: O(1).
+     */
     static long lcm(long a, long b) {
         if(a <= 0 || b <= 0) {
             throw new IllegalArgumentException("Both number must be positive");
